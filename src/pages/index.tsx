@@ -7,33 +7,48 @@ import Link from 'next/link'
 import { BlogListResponse } from '../types/blog'
 import { SiteDataResponse } from '../types/siteData'
 import { client } from '../utils/api'
+
+import { Header } from '../components/header'
+import { Main } from '../components/main'
+
 import styles from '../styles/Home.module.css'
 
 type StaticProps = {
   siteData: SiteDataResponse;
   blogList: BlogListResponse;
 }
+
 type PageProps = InferGetStaticPropsType<typeof getStaticProps>
 
 const Page: NextPage<PageProps> = (props) => {
   const { siteData, blogList } = props;
 
   return (
-    <main>
-      <h1>{siteData.title}</h1>
-      <section>
-        <h2>ブログ一覧</h2>
-        <ul>
-          {blogList.contents.map((blog) => (
-            <li key={blog.id}>
-              <Link href={`/blogs/${blog.id}`}>
-                <a>{blog.title}</a>
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </section>
-    </main>
+    <>
+      <Head>
+        <title>{siteData.title}</title>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      </Head>
+
+      <Header
+        title={siteData.title}
+      />
+
+      <Main>
+        <section>
+          <h2 className="text-xl mb-8">ブログ一覧</h2>
+          <ul className="list-disc ml-11">
+            {blogList.contents.map((blog) => (
+              <li key={blog.id} className="mb-5">
+                <Link href={`/blogs/${blog.id}`}>
+                  <a>{blog.title}</a>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      </Main>
+    </>
   );
 }
 
